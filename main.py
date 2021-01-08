@@ -24,10 +24,11 @@ def selection_work():
     if (varOption.get()) != "":
         index = invertedTime["Activity"].index(varOption.get())
         invertedTime["Time"][index] += 30
+    convertion_CSV(invertedTime)
     
-def convertionCSV(dictionary):
+def convertion_CSV(dictionary):
     dataFrameTime = pandas.DataFrame(dictionary)
-    dataFrameTime.to_csv
+    dataFrameTime.to_csv("MyTime.CSV")
     
 
 
