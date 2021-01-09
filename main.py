@@ -6,27 +6,35 @@ lightOrange = "#ecb390"
 orange = "#df7861"
 beigeLight = "#fcf8e8"
 FONT_NAME = "Courier"
-WORK_MIN = 25
-SHORT_BREAK_MIN = 5
+WORK_MIN = 00.001
+SHORT_BREAK_MIN = 00.1
 LONG_BREAK_MIN = 20
 reps = 1
 checksText = ""
 timer = None
 
-pythonTime = 0
-algorithmsTime = 0
-gitTime = 0
-invertedTime = {"Activity": ["Python", "Algorithm", "Git"], "Time": [pythonTime,algorithmsTime,algorithmsTime,]}
+fontRadio = (FONT_NAME, "10", "normal")
 
 # ---------------------------- INFO - TIME ------------------------------- # 
+#* Updates the CSV file  
+def extration_data():
+    dataCSV = pandas.read_csv("MyTime.CSV")
+
+    pythonTime = int(dataCSV[dataCSV.Activity == "Python"].Time)
+    algorithmsTime = int(dataCSV[dataCSV.Activity == "Algorithm"].Time)
+    gitTime = int(dataCSV[dataCSV.Activity == "Git"].Time)
+    invertedTime = {"Activity": ["Python", "Algorithm", "Git"], "Time": [pythonTime,algorithmsTime,gitTime]}       
+    return invertedTime
+
 def selection_work():
-    global pythonTime, algorithmsTime, gitTime
+    #* This check if the a buttom radio was selected, and increment the time
     if (varOption.get()) != "":
         index = invertedTime["Activity"].index(varOption.get())
         invertedTime["Time"][index] += 30
     convertion_CSV(invertedTime)
     
 def convertion_CSV(dictionary):
+    #* This update the data of the CSV
     dataFrameTime = pandas.DataFrame(dictionary)
     dataFrameTime.to_csv("MyTime.CSV")
     
@@ -44,8 +52,6 @@ def reset_timer():
     checksText == ""
     reps = 1
     
-
-
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 def start_timer():
     global reps
@@ -96,6 +102,8 @@ window = tk.Tk()
 window.title("Pomodoro")
 window.config(padx = 100, pady= 50, bg = beigeLight)
 
+invertedTime = extration_data()
+
 tomatoDirection = r"C:\Users\cesar\OneDrive\programacion\python\Pythonparteteorica\librerias\tkinter\pomodoro\pomodoro-start\tomato.png"
 tomatoImage = tk.PhotoImage(file = tomatoDirection)
 titleLabel = tk.Label(text = "Timer", bg = beigeLight, font = (FONT_NAME, 35, "bold"), foreground = orange)
@@ -107,11 +115,11 @@ minutes = canva.create_text(107, 130,text = "00:00", fill="white", font = (FONT_
 canva.grid(column = 1, row = 1)
 
 buttonStart = tk.Button(command = start_timer,text = "START" , bg = orange, foreground = "white", bd = 0, font = (FONT_NAME, 10, "bold"))
-buttonStart.config(padx = 10, pady = 10)
+buttonStart.config(padx = 20, pady = 15)
 buttonStart.grid(column = 0, row = 2)
 
 buttonReset = tk.Button(command = reset_timer, text = "Reset" , bg = orange, foreground = "white", bd = 0, font = (FONT_NAME, 10, "bold"))
-buttonReset.config(padx = 10, pady = 10)
+buttonReset.config(padx = 20, pady = 15)
 buttonReset.grid(column = 2, row = 2)
 
 checkLabel = tk.Label(text = checksText, bg = beigeLight, font = (FONT_NAME, 20, "bold"), foreground = greenLight)
@@ -121,11 +129,13 @@ checkLabel.grid(column = 1, row = 3)
 varOption = tk.StringVar()
 
 
-option1 = tk.Radiobutton(window, text='Python',variable=varOption, value = "Python",bg = beigeLight)
+option1 = tk.Radiobutton(window, text='Python',variable=varOption, value = "Python",bg = beigeLight, activeforeground = lightOrange, activebackground = beigeLight, font = fontRadio)
 option1.grid(column = 0, row = 3)
-option2 = tk.Radiobutton(window, text='Alghorithms',variable=varOption, value = "Algorithm", bg = beigeLight)
+
+option2 = tk.Radiobutton(window, text='Alghorithms',variable=varOption, value = "Algorithm", bg = beigeLight, activeforeground = lightOrange, activebackground = beigeLight, font = fontRadio)
 option2.grid(column = 1, row = 3)
-option3 = tk.Radiobutton(window, text='GIT-PROJECTS',variable=varOption, value = "Git", bg = beigeLight)
+
+option3 = tk.Radiobutton(window, text='GIT-PROJECTS',variable=varOption, value = "Git", bg = beigeLight, activeforeground = lightOrange, activebackground = beigeLight, font = fontRadio)
 option3.grid(column = 2, row = 3)
  
 window.mainloop()
